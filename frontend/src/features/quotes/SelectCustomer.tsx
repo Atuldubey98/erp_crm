@@ -31,6 +31,7 @@ export default function SelectCustomer({
           getOptionValue={(quoteCustomer: ICustomerPart) => quoteCustomer._id}
         />
       </label>
+      {customer ? <p className="font-bold">{customer.name}</p> : null}
       {customer ? <CustomerPart customer={customer} /> : null}
     </div>
   );

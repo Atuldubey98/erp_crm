@@ -1,12 +1,13 @@
+import { isAxiosError } from "axios";
 import { ChangeEvent, useCallback, useEffect, useReducer } from "react";
-import quoteFormReducer from "../features/quotes/quoteFormReducer";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { saveQuote } from "../api/quote.api";
+import quoteFormReducer from "../features/quotes/quoteFormReducer";
 import { filterQuoteItem, saveQuoteItemMapper } from "../helpers/quotes.helper";
-import { useNavigate } from "react-router-dom";
-import { isAxiosError } from "axios";
 
 export default function useQuoteForm() {
+  const { quoteId } = useParams();
   const initial = {
     customer: null,
     quoteItems: [],
@@ -34,6 +35,7 @@ export default function useQuoteForm() {
   const onRemoveQuoteItem = (quoteId: string) => {
     dispatch({ type: "REMOVE:QUOTE_ITEM", payload: quoteId });
   };
+
   const onAddQuoteItem = useCallback(() => {
     dispatch({
       type: "ADD:QUOTE_ITEM",
@@ -54,7 +56,10 @@ export default function useQuoteForm() {
   }, []);
   useEffect(() => {
     onAddQuoteItem();
-  }, [onAddQuoteItem]);
+    if (quoteId) {
+      (async () => {})();
+    }
+  }, [onAddQuoteItem, quoteId]);
   const onSetCustomer = (newCustomer: ICustomerPart | null) => {
     dispatch({ type: "SET:CUSTOMER", payload: newCustomer });
   };

@@ -9,7 +9,7 @@ import CustomerPage from "./features/customers/CustomerPage";
 import DashboardPage from "./features/dashboard";
 import LandingPage from "./features/landing";
 import QuotesPage from "./features/quotes";
-import NewQuoteFormPage from "./features/quotes/NewQuoteFormPage";
+import QuoteFormPage from "./features/quotes/NewQuoteFormPage";
 import SetupPage from "./features/setup";
 import QuotePage from "./features/quotes/QuotePage";
 export default function App() {
@@ -28,8 +28,8 @@ export default function App() {
         </Route>
         <Route path="/quotes">
           <Route path="" element={<QuotesPage />} />
-          <Route path="new" element={<NewQuoteFormPage />} />
-          <Route path=":quoteId/edit" element={<CustomerFormPage />} />
+          <Route path="new" element={<QuoteFormPage />} />
+          <Route path=":quoteId/edit" element={<QuoteFormPage />} />
           <Route path=":quoteId" element={<QuotePage />} />
         </Route>
       </Routes>

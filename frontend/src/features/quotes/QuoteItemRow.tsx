@@ -12,7 +12,12 @@ export function QuoteItemRow(props: { quote: IQuotesRowItem }) {
       },
       label: "View or download",
     },
-    { onClick: function () {}, label: "Edit" },
+    {
+      onClick: function () {
+        navigate(`/quotes/${props.quote._id}/edit`);
+      },
+      label: "Edit",
+    },
     { onClick: function () {}, label: "Delete" },
     { onClick: function () {}, label: "Download as pdf" },
   ];
