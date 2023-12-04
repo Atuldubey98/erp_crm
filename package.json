@@ -1,0 +1,23 @@
+{
+  "name": "mern-ts-starter",
+  "version": "1.0.0",
+  "description": "Mern starter project with typescript",
+  "scripts": {
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "install:backend": "cd backend && npm i",
+    "install:frontend": "cd frontend && npm i",
+    "docker:run:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:run:prod": "docker-compose up",
+    "build": "npm run build:frontend && npm run build:backend",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "express",
+    "reactjs",
+    "vite",
+    "nodejs"
+  ],
+  "author": "Atul Dubey",
+  "license": "ISC"
+}

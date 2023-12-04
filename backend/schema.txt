@@ -1,0 +1,179 @@
+
+==========
+Customers
+==========
+customers
+    name
+        type String
+        required
+        minLength 2,
+        maxLength 30;
+    shippingAddress
+        type String
+        minLength 2,
+        maxLength 80
+    gstNo 
+        type String
+        minLength 15
+        maxLength 15
+    createdBy
+        type ObjectId
+        ref user
+        required
+    updatedBy
+        type ObjectId
+        ref user
+    panNo
+        type String
+        minLength 10
+        maxLength 10
+    createdAt TimeStamp
+    updatedAt TimeStamp
+
+
+==========
+Users
+==========
+users
+    firstName
+        type String
+        minLength 3
+        maxLength 30
+        index
+        required
+    lastName
+        type String
+        maxLength 30
+    maidenName
+        type String
+        maxLength 30
+    email
+        type String
+        unique
+        required
+        maxLength 30
+        minLength 6
+        match /\S+@\S+\.\S+/
+        index
+    passwordSalt
+        type String
+        required
+        maxLength
+        minLength
+    role 
+        enum [user, admin]
+        default user
+        required
+    phoneNumber
+        type String
+    createdAt TimeStamp
+    updatedAt TimeStamp
+    active
+        type Boolean
+
+
+==========
+Quotations
+==========
+quotes
+    createdBy
+        type ObjectId
+        ref user
+        required
+    createdAt TimeStamp
+    updatedAt TimeStamp
+    updatedBy
+        type ObjectId
+        ref user
+    customer 
+        type ObjectId
+        ref customer
+        required
+        index
+    taxableAmount
+        type Number
+        default 0
+        min 0
+    sgst
+        type Number
+        default 0
+        min 0
+    cgst
+        type Number
+        default 0
+        min 0
+    igst
+        type Number
+        default 0
+        min 0
+    quoteNo
+        type String
+        unique true
+        required
+    description
+        type String
+        maxLength 250
+     termsAndConditions
+        type String
+        maxLength 1000
+    date
+        type date
+        required
+    grandTotal
+        type Number
+        min 0
+        default 0
+    quoteIndex
+        type Number
+        min 1 
+
+
+==========
+Quotation Items
+==========
+quoteItem
+    name
+        type String
+        minLength 3
+        maxLength 60
+        required
+    rate
+        type Number
+        min 0
+        default 0
+    qty
+        type Number
+        min 1
+        required
+    tax
+        gstType
+            type String
+            required
+            enum [GST, IGST, NONE]
+            default NONE
+        gstPercentage
+            type Number
+            required
+            min 0
+            max 100
+            default 0
+        required
+    code 
+        type String
+        minLength 6
+        maxLength 8
+    quote 
+        type ObjectId
+        required
+        ref quote
+    createdBy
+        type ObjectId
+        ref user
+        required
+    createdAt TimeStamp
+    updatedAt TimeStamp
+    updatedBy
+        type ObjectId
+        ref user
+    amount
+    
