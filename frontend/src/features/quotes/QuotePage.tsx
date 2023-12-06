@@ -3,59 +3,8 @@ import { useParams } from "react-router-dom";
 import { getFullQuote } from "../../api/quote.api";
 import PrivateMainLayout from "../layouts/PrivateMainLayout";
 import TableWrapper from "../layouts/TableWrapper";
-
-function QuoteDisplayHeader(props: { quote: Quote }) {
-  return (
-    <div className="leading-10 border-b-2 flex justify-between pb-3">
-      <div className="flex-1">
-        <p>Quote To :</p>
-        <p className="font-bold">{props.quote.customer.name}</p>
-        <p>{props.quote.customer.billingAddress}</p>
-        {props.quote.customer.gstNo ? (
-          <p>GST No. : {props.quote.customer.gstNo}</p>
-        ) : null}
-        {props.quote.customer.panNo ? (
-          <p>PAN No. : {props.quote.customer.panNo}</p>
-        ) : null}
-      </div>
-      <div className="flex-1 text-right">
-        <p className="font-bold">Q No. : {props.quote.quoteNo}</p>
-        <p>
-          Date :
-          {new Intl.DateTimeFormat("en-us").format(new Date(props.quote.date))}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function QuoteItem(props: { quoteItem: IQuoteItem; index: number }) {
-  return (
-    <tr className="text-sm">
-      <td className="border-2 border-emerald-500 p-1 text-center ">
-        {props.index}
-      </td>
-      <td className="border-2 border-emerald-500 p-1">
-        {props.quoteItem.name}
-      </td>
-      <td className="border-2 border-emerald-500 p-1">{props.quoteItem.qty}</td>
-      <td className="border-2 text-right border-emerald-500 p-1">
-        {props.quoteItem.rate}
-      </td>
-      <td className="border-2 w-16 border-emerald-500 p-1 text-right">
-        {props.quoteItem.tax.gstType + "@" + props.quoteItem.tax.gstPercentage}%
-      </td>
-      <td className="border-2 border-emerald-500 p-1 text-right">
-        {(parseFloat(props.quoteItem.tax.gstPercentage) / 100) *
-          props.quoteItem.rate *
-          props.quoteItem.qty}
-      </td>
-      <td className="border-2 text-right border-emerald-500 p-1">
-        {props.quoteItem.amount}
-      </td>
-    </tr>
-  );
-}
+import { QuoteDisplayHeader } from "./QuoteDisplayHeader";
+import { QuoteItem } from "./QuoteItem";
 
 export default function QuotePage() {
   const { quoteId = "" } = useParams();
@@ -91,6 +40,7 @@ export default function QuotePage() {
                 "*",
                 "Particulars",
                 "Qty",
+                "UM",
                 "Rate",
                 "GST",
                 "Tax",
@@ -106,7 +56,7 @@ export default function QuotePage() {
               ))}
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="text-right font-bold p-1 border-emerald-500 border-2"
                 >
                   Sub Total
@@ -120,7 +70,7 @@ export default function QuotePage() {
               </tr>
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="text-right font-bold p-1 border-emerald-500 border-2"
                 >
                   Total Tax
@@ -134,7 +84,7 @@ export default function QuotePage() {
               </tr>
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="text-right font-bold p-1 border-emerald-500 border-2"
                 >
                   Grand Total
@@ -145,8 +95,11 @@ export default function QuotePage() {
               </tr>
             </TableWrapper>
           </div>
-          {quote.termsAndCondtions ? (
-            <div className="text-sm leading-8">{quote.termsAndCondtions}</div>
+          {quote.termsAndConditions ? (
+            <div className="text-sm leading-8">
+              <h3 className="text-md font-bold">Terms And Conditons :</h3>
+              <p>{quote.termsAndConditions}</p>
+            </div>
           ) : null}
           {quote.description ? (
             <div className="text-sm leading-8">

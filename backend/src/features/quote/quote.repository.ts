@@ -3,7 +3,7 @@ import { IQuoteItem } from "../quote_item/types";
 import { nextIndexFromSetting } from "../settings/settings.repository";
 import Quote from "./quote.model";
 import { quoteItemsSchema, quoteJoiSchema } from "./quote.request";
-import { ICreateQuote } from "./types";
+import { ICreateQuote, IUpdateQuote } from "./types";
 export async function makeQuote(quote: ICreateQuote) {
   const validatedQuoteItems = await quoteItemsSchema.validateAsync(
     quote.quoteItems
@@ -47,8 +47,6 @@ export async function makeQuote(quote: ICreateQuote) {
 }
 
 export async function createQuote(quote: ICreateQuote) {
-  console.log(quote);
-
   const newQuote = new Quote(quote);
   return newQuote.save();
 }
@@ -64,4 +62,9 @@ export async function getQuote(quoteId: string, select = "") {
     .select(select)
     .populate("customer", "billingAddress name gstNo panNo")
     .populate("createdBy", "email firstName lastName");
+}
+
+export async function updateQuote(quote: IUpdateQuote) {
+  const { _id, ...restQuote } = quote;
+  return Quote.findByIdAndUpdate(_id, restQuote);
 }

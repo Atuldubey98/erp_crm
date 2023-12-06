@@ -1,11 +1,15 @@
 import { Router } from "express";
-import { createEntityHandler } from "../../handlers/entity.handler";
+import {
+  createEntityHandler,
+  updateEntityHandler,
+} from "../../handlers/entity.handler";
 import {
   createQuoteController,
   downloadQuoteByIdController,
   getQuoteByIdController,
   getQuoteItemsController,
   getQuotesController,
+  updateQuoteController,
 } from "./quote.controller";
 import authenticationMiddleware from "../../middlewares/authentication.middleware";
 
@@ -25,3 +29,9 @@ quoteRouter.get(
 quoteRouter.get("/:quoteId/download", downloadQuoteByIdController);
 quoteRouter.get("/:quoteId", authenticationMiddleware, getQuoteByIdController);
 export default quoteRouter;
+quoteRouter.patch(
+  "/:quoteId",
+  authenticationMiddleware,
+  updateEntityHandler,
+  updateQuoteController
+);

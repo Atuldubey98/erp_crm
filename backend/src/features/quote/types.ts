@@ -14,7 +14,9 @@ export interface IQuote {
   termsAndConditions?: string;
   grandTotal: number;
 }
-
+export interface IUpdateQuote {
+  _id: string;
+}
 export interface ICreateQuote extends Partial<IQuote> {
   quoteItems?: IQuoteItem[];
 }

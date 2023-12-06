@@ -27,6 +27,10 @@ export default function quoteFormReducer(
       return { ...state, termsAndConditons: action.payload };
     case "SET:DATE":
       return { ...state, date: action.payload };
+    case "SET:QUOTE":
+      return { ...state, ...action.payload };
+    case "SET:QUOTE_ITEMS":
+      return { ...state, quoteItems: action.payload };
     default:
       return state;
   }

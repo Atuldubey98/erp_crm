@@ -13,4 +13,5 @@ export interface IQuoteItem {
   createdBy: string;
   updatedBy?: string;
   total: number;
+  _id?: string;
 }

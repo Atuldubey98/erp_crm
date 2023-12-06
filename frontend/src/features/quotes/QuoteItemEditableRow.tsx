@@ -16,7 +16,13 @@ export default function QuoteItemEditableRow({
     tax: (e: ChangeEvent<HTMLSelectElement>) => void;
     unit: (e: ChangeEvent<HTMLSelectElement>) => void;
   };
-  onRemoveQuoteItem: (quoteId: string) => void;
+  onRemoveQuoteItem: ({
+    quoteItemId,
+    quote,
+  }: {
+    quoteItemId: string;
+    quote?: string;
+  }) => void;
 }) {
   const tax = `${quoteItem.tax.gstType}:${quoteItem.tax.gstPercentage}`;
   const total = `${(
@@ -31,7 +37,12 @@ export default function QuoteItemEditableRow({
     <tr className="border-b-2 border-emerald-500">
       <td className="w-8">
         <img
-          onClick={() => onRemoveQuoteItem(quoteItem._id || "")}
+          onClick={() =>
+            onRemoveQuoteItem({
+              quoteItemId: quoteItem._id || "",
+              quote: quoteItem.quote,
+            })
+          }
           className="cursor-pointer mx-auto"
           src={removeSvg}
           alt="Remove"

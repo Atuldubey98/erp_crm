@@ -8,6 +8,11 @@ const quoteItemSchema = new Schema(
       maxLength: 60,
       required: true,
     },
+    unit: {
+      type: String,
+      minLength: 1,
+      maxLength: 10,
+    },
     rate: {
       type: Number,
       min: 0,

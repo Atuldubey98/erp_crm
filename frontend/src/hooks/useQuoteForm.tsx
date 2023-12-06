@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
 import { ChangeEvent, useCallback, useEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { saveQuote } from "../api/quote.api";
+import { getFullQuote, saveQuote, updateQuote } from "../api/quote.api";
 import quoteFormReducer from "../features/quotes/quoteFormReducer";
 import { filterQuoteItem, saveQuoteItemMapper } from "../helpers/quotes.helper";
 
@@ -11,9 +11,8 @@ export default function useQuoteForm() {
   const initial = {
     customer: null,
     quoteItems: [],
-    _id: "",
-    description: "",
     date: new Date(Date.now()).toISOString().split("T")[0],
+    description: "",
     termsAndConditons: "",
   };
   const [state, dispatch] = useReducer(quoteFormReducer, initial);
@@ -32,8 +31,17 @@ export default function useQuoteForm() {
       payload: e.currentTarget.value,
     });
   };
-  const onRemoveQuoteItem = (quoteId: string) => {
-    dispatch({ type: "REMOVE:QUOTE_ITEM", payload: quoteId });
+  const onRemoveQuoteItem = ({
+    quoteItemId,
+    quote,
+  }: {
+    quoteItemId: string;
+    quote?: string;
+  }) => {
+    dispatch({ type: "REMOVE:QUOTE_ITEM", payload: quoteItemId });
+    if (quote) {
+      console.log(quote);
+    }
   };
 
   const onAddQuoteItem = useCallback(() => {
@@ -55,9 +63,38 @@ export default function useQuoteForm() {
     });
   }, []);
   useEffect(() => {
-    onAddQuoteItem();
     if (quoteId) {
-      (async () => {})();
+      (async () => {
+        const [quoteRes, quoteItemsRes] = await getFullQuote(quoteId);
+        const quote = quoteRes.data.data;
+        dispatch({
+          type: "SET:QUOTE",
+          payload: {
+            ...quote,
+            date: new Date(quote.date).toISOString().split("T")[0],
+          },
+        });
+        dispatch({
+          type: "SET:QUOTE_ITEMS",
+          payload: quoteItemsRes.data.data,
+        });
+      })();
+    } else {
+      dispatch({
+        type: "SET:QUOTE",
+        payload: {
+          customer: null,
+          date: new Date(Date.now()).toISOString().split("T")[0],
+          description: "",
+          termsAndConditions: "",
+          quoteNo: "",
+        },
+      });
+      dispatch({
+        type: "SET:QUOTE_ITEMS",
+        payload: [],
+      });
+      onAddQuoteItem();
     }
   }, [onAddQuoteItem, quoteId]);
   const onSetCustomer = (newCustomer: ICustomerPart | null) => {
@@ -157,15 +194,26 @@ export default function useQuoteForm() {
   const submitForm = async () => {
     try {
       if (state._id) {
-        console.log(state);
+        const quote = {
+          customer: state.customer?._id,
+          quoteItems: state.quoteItems
+            .filter(filterQuoteItem)
+            .map(saveQuoteItemMapper("patch")),
+          termsAndConditions: state.termsAndConditons,
+          description: state.description,
+          createdBy: state.createdBy?._id,
+        };
+        await updateQuote(quoteId || "", quote);
+        navigate(`/quotes/${quoteId}`);
       } else {
         const quote = {
           customer: state.customer?._id,
           quoteItems: state.quoteItems
             .filter(filterQuoteItem)
-            .map(saveQuoteItemMapper),
+            .map(saveQuoteItemMapper("post")),
           termsAndConditions: state.termsAndConditons,
           description: state.description,
+          createdBy: state.createdBy?._id,
         };
         const { data } = await saveQuote(quote);
         navigate(`/quotes/${data.data._id}`);

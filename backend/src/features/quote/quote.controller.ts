@@ -1,5 +1,19 @@
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
+import { parseDate } from "../../helpers/date.helper";
 import requestAsyncHandler from "../../middlewares/requestAsyncHandler";
+import QuoteItem from "../quote_item/quote_item.model";
+import {
+  getQuoteItemsByQuote,
+  updateQuoteItems,
+} from "../quote_item/quote_item.repository";
+import { IQuoteItem } from "../quote_item/types";
+import {
+  ESettingType,
+  getSettingsByType,
+} from "../settings/settings.repository";
+import { QuoteNotFound } from "./errors";
+import Quote from "./quote.model";
 import {
   createQuote,
   getAllQuotes,
@@ -7,25 +21,17 @@ import {
   makeQuote,
 } from "./quote.repository";
 import { ICreateQuote } from "./types";
-import QuoteItem from "../quote_item/quote_item.model";
-import { parseDate } from "../../helpers/date.helper";
-import { getQuoteItemsByQuote } from "../quote_item/quote_item.repository";
-import { QuoteNotFound } from "./errors";
-import {
-  ESettingType,
-  getSettingsByType,
-} from "../settings/settings.repository";
 export const createQuoteController = requestAsyncHandler(
   async (req: Request, res: Response) => {
     const { quoteItems = [], ...quote }: ICreateQuote = await makeQuote(
       req.body
     );
-
     const newQuote = await createQuote(quote);
 
     await QuoteItem.insertMany(
       quoteItems.map((item) => ({ ...item, quote: newQuote.id }))
     );
+
     return res
       .status(201)
       .json({ status: true, message: "New quotation saved !", data: newQuote });
@@ -62,7 +68,7 @@ export const getQuotesController = requestAsyncHandler(
 export const getQuoteItemsController = requestAsyncHandler(
   async (req: Request, res: Response) => {
     const quoteId = req.params.quoteId;
-    if (!quoteId) throw new QuoteNotFound();
+    if (!isValidObjectId(quoteId)) throw new QuoteNotFound();
     const quoteItems = await getQuoteItemsByQuote(quoteId);
     return res.status(200).json({ status: true, data: quoteItems });
   }
@@ -70,7 +76,7 @@ export const getQuoteItemsController = requestAsyncHandler(
 export const getQuoteByIdController = requestAsyncHandler(
   async (req: Request, res: Response) => {
     const quoteId = req.params.quoteId;
-    if (!quoteId) throw new QuoteNotFound();
+    if (!isValidObjectId(quoteId)) throw new QuoteNotFound();
     const quote = await getQuote(quoteId, String(req.query.select));
     if (!quote) throw new QuoteNotFound();
     return res.status(200).json({ status: true, data: quote });
@@ -81,12 +87,38 @@ export const downloadQuoteByIdController = requestAsyncHandler(
   async (req: Request, res: Response) => {
     const quoteId = req.params.quoteId;
     const select = req.query.select || "";
-    if (!quoteId) throw new QuoteNotFound();
+    if (!isValidObjectId(quoteId)) throw new QuoteNotFound();
     const [quote, quoteItems] = await Promise.all([
       getQuote(quoteId, String(select)),
       getQuoteItemsByQuote(quoteId),
     ]);
+    if (!quote) throw new QuoteNotFound();
     const company = await getSettingsByType(ESettingType.COMPANY);
     return res.render("quote", { quote, quoteItems, company });
+  }
+);
+
+export const updateQuoteController = requestAsyncHandler(
+  async (req: Request, res: Response) => {
+    const quoteId = req.params.quoteId;
+    if (!isValidObjectId(quoteId)) throw new QuoteNotFound();
+    const { quoteItems = [], ...quote }: ICreateQuote = await makeQuote(
+      req.body
+    );
+    const newQuoteItems: IQuoteItem[] = [];
+    const oldQuoteItems: IQuoteItem[] = [];
+    quoteItems.forEach((quoteItem: IQuoteItem) => {
+      if (quoteItem.quote) {
+        oldQuoteItems.push(quoteItem);
+      } else {
+        newQuoteItems.push(quoteItem);
+      }
+    });
+    await Quote.findByIdAndUpdate(quoteId, quote);
+    await QuoteItem.insertMany(
+      newQuoteItems.map(({ _id, ...item }) => ({ ...item, quote: quoteId }))
+    );
+    await updateQuoteItems(oldQuoteItems);
+    return res.status(200).json({ status: true, data: quoteId });
   }
 );

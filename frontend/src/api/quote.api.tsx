@@ -44,3 +44,20 @@ export const getFullQuote = (quoteId: string) => {
 export const getDownloadableQuote = (quoteId: string) => {
   return apiInstance.get(`${EQuoteApi.QUOTES}/${quoteId}/download`);
 };
+
+export const updateQuote = (
+  quoteId: string,
+  quote: {
+    customer: string | undefined;
+    quoteItems: {
+      rate: number;
+      tax: ITax;
+      qty: number;
+      name: string;
+    }[];
+    description: string;
+    termsAndConditions: string;
+  }
+) => {
+  return apiInstance.patch(`${EQuoteApi.QUOTES}/${quoteId}`, quote);
+};

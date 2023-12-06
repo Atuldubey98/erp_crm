@@ -20,7 +20,7 @@ export default function SelectCustomer({
       <label className="block">
         <span className="text-sm font-bold">Customer name</span>
         <AsyncSelect
-          required
+          required={!customer}
           className="outline-none text-sm"
           defaultOptions={[]}
           onChange={(value) => {
