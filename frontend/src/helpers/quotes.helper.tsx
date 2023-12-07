@@ -1,3 +1,5 @@
+import { NavigateFunction } from "react-router-dom";
+
 export const saveQuoteItemMapper = (typeOfRequest: "post" | "patch") => {
   return ({ rate, tax, qty, name, ...rest }: ICreateQuotesRowItemDTO) => {
     const { amount, createdAt, updatedAt, hasError, ...restQuoteItem } = rest;

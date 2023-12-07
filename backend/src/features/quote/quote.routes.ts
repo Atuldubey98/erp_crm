@@ -41,6 +41,11 @@ quoteRouter.patch(
   updateEntityHandler,
   updateQuoteController
 );
-quoteRouter.patch("/:quoteId", authenticationMiddleware, deleteQuoteController);
+
+quoteRouter.delete(
+  "/:quoteId",
+  authenticationMiddleware,
+  deleteQuoteController
+);
 
 export default quoteRouter;

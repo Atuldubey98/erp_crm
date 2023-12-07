@@ -61,3 +61,7 @@ export const updateQuote = (
 ) => {
   return apiInstance.patch(`${EQuoteApi.QUOTES}/${quoteId}`, quote);
 };
+
+export const deleteQuote = (quoteId: string) => {
+  return apiInstance.delete(`${EQuoteApi.QUOTES}/${quoteId}`);
+};

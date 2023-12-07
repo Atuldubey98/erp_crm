@@ -39,5 +39,8 @@ export default function useQuotes() {
     onChangeFilter,
     filter,
   };
-  return { quotes, status, filterProps };
+  const removeQuoteItem = (quoteId: string) => {
+    setQuotes(quotes.filter((quote) => quote._id !== quoteId));
+  };
+  return { quotes, status, filterProps, removeQuoteItem };
 }

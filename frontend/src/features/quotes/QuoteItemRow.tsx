@@ -2,8 +2,13 @@ import { useNavigate } from "react-router-dom";
 import TableData from "../common/TableData";
 import OptionsDropDown from "../customers/OptionsDropDown";
 import TableRowLayout from "../layouts/TableRowLayout";
+import { deleteQuote } from "../../api/quote.api";
+import DropDownIcon from "../common/DropDownIcon";
 
-export function QuoteItemRow(props: { quote: IQuotesRowItem }) {
+export function QuoteItemRow(props: {
+  quote: IQuotesRowItem;
+  removeQuoteItem: (quoteId: string) => void;
+}) {
   const navigate = useNavigate();
   const dropDownList = [
     {
@@ -18,7 +23,16 @@ export function QuoteItemRow(props: { quote: IQuotesRowItem }) {
       },
       label: "Edit",
     },
-    { onClick: function () {}, label: "Delete" },
+    {
+      onClick: async function () {
+        const response = confirm("Do you want to delete the quote?");
+        if (response && props.quote._id) {
+          await deleteQuote(props.quote._id);
+          props.removeQuoteItem(props.quote._id);
+        }
+      },
+      label: "Delete",
+    },
     { onClick: function () {}, label: "Download as pdf" },
   ];
   return (
@@ -40,28 +54,7 @@ export function QuoteItemRow(props: { quote: IQuotesRowItem }) {
       <td className="w-20">
         <div className="flex items-center justify-center">
           <OptionsDropDown dropDownList={dropDownList}>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM12 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
-                  fill="#000000"
-                  fillOpacity=".16"
-                  stroke="#000000"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                />
-              </g>
-            </svg>
+            <DropDownIcon />
           </OptionsDropDown>
         </div>
       </td>

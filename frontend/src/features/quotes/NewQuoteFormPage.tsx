@@ -77,12 +77,6 @@ export default function NewQuoteFormPage() {
       <section className="p-3">
         <FormHeading text="Estimate" />
         <form onSubmit={onSubmit} className="grid gap-2 my-2 text-sm">
-          <div className="flex items-center justify-end">
-            <label className="text-slate-800" htmlFor="date">
-              Q No. :
-            </label>
-            <span className="font bold">1</span>
-          </div>
           <SelectCustomer {...customerProps} />
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center">

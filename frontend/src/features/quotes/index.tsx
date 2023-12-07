@@ -5,7 +5,7 @@ import { Filter } from "./Filter";
 import { QuoteItemRow } from "./QuoteItemRow";
 
 export default function QuotesPage() {
-  const { filterProps, quotes } = useQuotes();
+  const { filterProps, quotes, removeQuoteItem } = useQuotes();
   return (
     <PrivateMainLayout>
       <Filter {...filterProps} />
@@ -21,7 +21,11 @@ export default function QuotesPage() {
           ]}
         >
           {quotes.map((quote) => (
-            <QuoteItemRow key={quote._id} quote={quote} />
+            <QuoteItemRow
+              key={quote._id}
+              quote={quote}
+              removeQuoteItem={removeQuoteItem}
+            />
           ))}
         </TableWrapper>
       </section>
