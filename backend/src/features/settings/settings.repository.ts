@@ -47,7 +47,7 @@ export const nextIndexFromSetting = async (
   model: Model<any, any>
 ) => {
   const lastInsertedQuote = await model.findOne({}).sort({ createdAt: -1 });
-  const quoteIndex = lastInsertedQuote
+  const quoteIndexNext = lastInsertedQuote
     ? (lastInsertedQuote.quoteIndex || 0) + 1
     : 1;
   const quoteSetting = (await getSettingsByType(settingType)) as unknown as
@@ -56,9 +56,9 @@ export const nextIndexFromSetting = async (
   if (!quoteSetting) {
     throw new SettingNotFoundError();
   }
-  const quoteNo =
+  const quoteNoNext =
     quoteSetting.seriesType === "append"
-      ? `${quoteIndex}${quoteSetting.value || ""}`
-      : `${quoteSetting.value || ""}${quoteIndex}`;
-  return { quoteNo, quoteIndex };
+      ? `${quoteIndexNext}${quoteSetting.value || ""}`
+      : `${quoteSetting.value || ""}${quoteIndexNext}`;
+  return { quoteIndexNext, quoteNoNext };
 };

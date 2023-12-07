@@ -33,6 +33,8 @@ export default function QuoteItemEditableRow({
   ).toFixed(2)}`;
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useAutosizeTextArea(textAreaRef.current, quoteItem.name);
+  const subtotal =
+    parseFloat(quoteItem.rate || "0") * parseFloat(quoteItem.qty || "0");
   return (
     <tr className="border-b-2 border-emerald-500">
       <td className="w-8">
@@ -110,6 +112,9 @@ export default function QuoteItemEditableRow({
           id="rate"
           className="disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none bg-white placeholder-slate-400 focus:outline-none block w-full rounded-md sm:text-sm text-right"
         />
+      </td>
+      <td className="border-emerald-500 text-sm text-right border-x-2 w-20">
+        {subtotal.toFixed(2)}
       </td>
       <td className="border-emerald-500 text-sm border-x-2 w-20">
         <select

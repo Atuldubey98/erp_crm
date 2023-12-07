@@ -5,19 +5,20 @@ export function TotalBottomRow(props: {
 }) {
   return (
     <tr>
-      <td className="font-bold p-2" colSpan={3}>
+      <td className="font-bold " colSpan={3}>
         Total
       </td>
-      <td className="border-l-2 p-2 border-emerald-500 text-right">
+      <td className="border-l-2  border-emerald-500 text-right">
         {props.totalQty.toFixed(2)}
       </td>
-      <td className="border-l-2 p-2 border-emerald-500"></td>
-      <td className="border-l-2 p-2 border-emerald-500"></td>
-      <td className="border-l-2 p-2 border-emerald-500 text-right">
+      <td className="border-l-2  border-emerald-500"></td>
+      <td className="border-l-2  border-emerald-500"></td>
+      <td className="border-l-2  border-emerald-500 text-right"></td>
+      <td className="border-l-2  border-emerald-500 text-right">
         {props.totalGST.toFixed(2)}
       </td>
-      <td className="border-l-2 p-2 border-emerald-500 text-right">
-        {props.grandTotal}
+      <td colSpan={2} className="border-l-2  border-emerald-500 text-right">
+        {props.grandTotal.toFixed(2)}
       </td>
     </tr>
   );

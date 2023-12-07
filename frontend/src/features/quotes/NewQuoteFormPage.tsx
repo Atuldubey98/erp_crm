@@ -24,6 +24,7 @@ export default function NewQuoteFormPage() {
     "Qty",
     "Unit",
     "Rate",
+    "Total",
     "GST",
     "Amount",
   ];

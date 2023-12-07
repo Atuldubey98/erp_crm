@@ -5,6 +5,7 @@ import {
 } from "../../handlers/entity.handler";
 import {
   createQuoteController,
+  deleteQuoteController,
   downloadQuoteByIdController,
   getQuoteByIdController,
   getQuoteItemsController,
@@ -14,24 +15,32 @@ import {
 import authenticationMiddleware from "../../middlewares/authentication.middleware";
 
 const quoteRouter = Router();
+
 quoteRouter.post(
   "/",
   authenticationMiddleware,
   createEntityHandler,
   createQuoteController
 );
+
 quoteRouter.get("/", authenticationMiddleware, getQuotesController);
+
 quoteRouter.get(
   "/:quoteId/items",
   authenticationMiddleware,
   getQuoteItemsController
 );
+
 quoteRouter.get("/:quoteId/download", downloadQuoteByIdController);
+
 quoteRouter.get("/:quoteId", authenticationMiddleware, getQuoteByIdController);
-export default quoteRouter;
+
 quoteRouter.patch(
   "/:quoteId",
   authenticationMiddleware,
   updateEntityHandler,
   updateQuoteController
 );
+quoteRouter.patch("/:quoteId", authenticationMiddleware, deleteQuoteController);
+
+export default quoteRouter;

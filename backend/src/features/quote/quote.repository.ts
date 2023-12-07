@@ -29,7 +29,17 @@ export async function makeQuote(quote: ICreateQuote) {
     (prev, next) => prev + next.rate * next.qty,
     0
   );
-  const { quoteIndex, quoteNo } = await nextIndexFromSetting("quote", Quote);
+  let quoteNo: undefined | string = undefined;
+  let quoteIndex: undefined | number = undefined;
+
+  if (!quote.quoteNo) {
+    let { quoteIndexNext, quoteNoNext } = await nextIndexFromSetting(
+      "quote",
+      Quote
+    );
+    quoteNo = quoteNoNext;
+    quoteIndex = quoteIndexNext;
+  }
   const grandTotal = taxableAmount + sgst + cgst + igst;
 
   const newQuote = await quoteJoiSchema.validateAsync({
@@ -67,4 +77,8 @@ export async function getQuote(quoteId: string, select = "") {
 export async function updateQuote(quote: IUpdateQuote) {
   const { _id, ...restQuote } = quote;
   return Quote.findByIdAndUpdate(_id, restQuote);
+}
+
+export async function deleteQuote(quoteId: string) {
+  return Quote.findByIdAndDelete(quoteId);
 }

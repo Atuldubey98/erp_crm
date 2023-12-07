@@ -13,7 +13,7 @@ export default function useQuoteForm() {
     quoteItems: [],
     date: new Date(Date.now()).toISOString().split("T")[0],
     description: "",
-    termsAndConditons: "",
+    termsAndConditions: "",
   };
   const [state, dispatch] = useReducer(quoteFormReducer, initial);
   const onChangeDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -184,7 +184,7 @@ export default function useQuoteForm() {
     onChangeDescription,
     onChangeTermsAndCondtion,
     description: state.description,
-    termsAndCondtions: state.termsAndConditons,
+    termsAndCondtions: state.termsAndConditions,
   };
   const dateProps = {
     onChangeDate,
@@ -199,19 +199,21 @@ export default function useQuoteForm() {
           quoteItems: state.quoteItems
             .filter(filterQuoteItem)
             .map(saveQuoteItemMapper("patch")),
-          termsAndConditions: state.termsAndConditons,
+          termsAndConditions: state.termsAndConditions,
           description: state.description,
           createdBy: state.createdBy?._id,
+          quoteNo: state.quoteNo,
         };
         await updateQuote(quoteId || "", quote);
         navigate(`/quotes/${quoteId}`);
+        toast.info("Quotation updated");
       } else {
         const quote = {
           customer: state.customer?._id,
           quoteItems: state.quoteItems
             .filter(filterQuoteItem)
             .map(saveQuoteItemMapper("post")),
-          termsAndConditions: state.termsAndConditons,
+          termsAndConditions: state.termsAndConditions,
           description: state.description,
           createdBy: state.createdBy?._id,
         };

@@ -1,10 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getFullQuote } from "../../api/quote.api";
 import PrivateMainLayout from "../layouts/PrivateMainLayout";
 import TableWrapper from "../layouts/TableWrapper";
 import { QuoteDisplayHeader } from "./QuoteDisplayHeader";
 import { QuoteItem } from "./QuoteItem";
+import QuoteTerms from "./QuoteTerms";
+
+function QuoteButtons(props: { _id: string }) {
+  return (
+    <div className="gap-2 flex items-center justify-end">
+      <Link className="font-bold text-purple-900" to={`/quotes/${props._id}`}>
+        Edit
+      </Link>
+      <button className="font-bold text-red-500">Delete</button>
+    </div>
+  );
+}
 
 export default function QuotePage() {
   const { quoteId = "" } = useParams();
@@ -33,6 +45,7 @@ export default function QuotePage() {
     <PrivateMainLayout>
       {quote ? (
         <div className="p-3">
+          <QuoteButtons _id={quote._id} />
           <QuoteDisplayHeader quote={quote} />
           <div className="mt-2">
             <TableWrapper
@@ -65,7 +78,7 @@ export default function QuotePage() {
                   colSpan={2}
                   className="text-right p-1 border-emerald-500 border-2"
                 >
-                  {quote.taxableAmount}
+                  {quote.taxableAmount.toFixed(2)}
                 </td>
               </tr>
               <tr>
@@ -79,7 +92,7 @@ export default function QuotePage() {
                   colSpan={2}
                   className="text-right p-1 border-emerald-500 border-2"
                 >
-                  {totalGST}
+                  {totalGST.toFixed(2)}
                 </td>
               </tr>
               <tr>
@@ -90,26 +103,18 @@ export default function QuotePage() {
                   Grand Total
                 </td>
                 <td colSpan={2} className="text-right p-1">
-                  {quote.grandTotal}
+                  {quote.grandTotal.toFixed(2)}
                 </td>
               </tr>
             </TableWrapper>
           </div>
-          {quote.termsAndConditions ? (
-            <div className="text-sm leading-8">
-              <h3 className="text-md font-bold">Terms And Conditons :</h3>
-              <p>{quote.termsAndConditions}</p>
-            </div>
-          ) : null}
-          {quote.description ? (
-            <div className="text-sm leading-8">
-              <h3 className="text-md font-bold">Description</h3>
-              <p>{quote.description}</p>
-            </div>
-          ) : null}
+          <QuoteTerms
+            termsAndConditions={quote.termsAndConditions}
+            description={quote.description}
+          />
         </div>
       ) : (
-        <div></div>
+        <></>
       )}
     </PrivateMainLayout>
   );

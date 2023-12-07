@@ -17,3 +17,7 @@ export const updateQuoteItems = (quoteItems: IQuoteItem[]) => {
     )
   );
 };
+
+export const deleteQuoteItems = (quoteId: string) => {
+  return QuoteItem.deleteMany({ quote: quoteId });
+};

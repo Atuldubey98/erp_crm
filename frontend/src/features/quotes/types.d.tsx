@@ -74,7 +74,7 @@ type ICreateQuoteState = {
     email: string;
   };
   _id?: string;
-  termsAndConditons: string;
+  termsAndConditions: string;
 };
 
 type ICreateQuoteActions =

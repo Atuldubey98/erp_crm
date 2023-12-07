@@ -4,6 +4,7 @@ import { parseDate } from "../../helpers/date.helper";
 import requestAsyncHandler from "../../middlewares/requestAsyncHandler";
 import QuoteItem from "../quote_item/quote_item.model";
 import {
+  deleteQuoteItems,
   getQuoteItemsByQuote,
   updateQuoteItems,
 } from "../quote_item/quote_item.repository";
@@ -16,6 +17,7 @@ import { QuoteNotFound } from "./errors";
 import Quote from "./quote.model";
 import {
   createQuote,
+  deleteQuote,
   getAllQuotes,
   getQuote,
   makeQuote,
@@ -120,5 +122,20 @@ export const updateQuoteController = requestAsyncHandler(
     );
     await updateQuoteItems(oldQuoteItems);
     return res.status(200).json({ status: true, data: quoteId });
+  }
+);
+
+export const deleteQuoteController = requestAsyncHandler(
+  async (req: Request, res: Response) => {
+    const quoteId = req.params.quoteId;
+    if (!isValidObjectId(quoteId)) throw new QuoteNotFound();
+    const quote = await deleteQuote(quoteId);
+    if (!quote) {
+      throw new QuoteNotFound();
+    }
+    await deleteQuoteItems(quoteId);
+    return res
+      .status(200)
+      .json({ status: true, data: "Quote delted successfully" });
   }
 );
