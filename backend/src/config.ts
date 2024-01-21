@@ -20,10 +20,10 @@ export const isEnvDev = NODE_ENV === "development";
 export const JWT_ISSUER = process.env.JWT_ISSUER;
 export const JWT_AUDIENCE = process.env.JWT_AUDIENCE;
 export const JWT_EXPIRE = process.env.JWT_EXPIRE;
-export const privateKey = fs.readFileSync("./src/keys/private-key.pem", {
+export const privateKey = fs.readFileSync("./src/keys/private-key", {
   encoding: "utf-8",
 });
 
-export const publicKey = fs.readFileSync("./src/keys/public-key.pem", {
+export const publicKey = fs.readFileSync("./src/keys/public.key", {
   encoding: "utf-8",
 });

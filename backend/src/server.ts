@@ -1,20 +1,15 @@
-import app from "./app";
 import http from "http";
-import {
-  MONGO_INITDB_ROOT_PASSWORD,
-  MONGO_INITDB_ROOT_USERNAME,
-  MONGO_URI,
-  PORT,
-} from "./config";
-import process from "process";
 import mongoose from "mongoose";
+import process from "process";
+import app from "./app";
+import {
+  MONGO_URI,
+  PORT
+} from "./config";
 const server = http.createServer(app);
 
 mongoose
-  .connect(MONGO_URI, {
-    user: MONGO_INITDB_ROOT_USERNAME,
-    pass: MONGO_INITDB_ROOT_PASSWORD,
-  })
+  .connect(MONGO_URI)
   .then(() => {
     console.log(`Connected to mongodb 👍🏻`);
   })
