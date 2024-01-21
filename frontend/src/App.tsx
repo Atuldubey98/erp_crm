@@ -1,39 +1,35 @@
-import { Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SettingsContextProvider from "./contexts/SettingsContextProvider";
-import AuthenticationPage from "./features/auth";
-import CustomersPage from "./features/customers";
-import CustomerFormPage from "./features/customers/CustomerFormPage";
-import CustomerPage from "./features/customers/CustomerPage";
-import DashboardPage from "./features/dashboard";
-import LandingPage from "./features/landing";
-import QuotesPage from "./features/quotes";
-import QuoteFormPage from "./features/quotes/NewQuoteFormPage";
-import SetupPage from "./features/setup";
-import QuotePage from "./features/quotes/QuotePage";
-export default function App() {
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <SettingsContextProvider>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/setup" element={<SetupPage />} />
-        <Route path="/auth" element={<AuthenticationPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/customers">
-          <Route path="" element={<CustomersPage />} />
-          <Route path="new" element={<CustomerFormPage />} />
-          <Route path=":customerId/edit" element={<CustomerFormPage />} />
-          <Route path=":customerId" element={<CustomerPage />} />
-        </Route>
-        <Route path="/quotes">
-          <Route path="" element={<QuotesPage />} />
-          <Route path="new" element={<QuoteFormPage />} />
-          <Route path=":quoteId/edit" element={<QuoteFormPage />} />
-          <Route path=":quoteId" element={<QuotePage />} />
-        </Route>
-      </Routes>
-      <ToastContainer />
-    </SettingsContextProvider>
-  );
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
+
+export default App
